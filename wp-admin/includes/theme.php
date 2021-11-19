@@ -602,18 +602,15 @@ function themes_api( $action, $args = array() ) {
 			}
 		}
 
-		if ( ! is_wp_error( $res ) ) {
-			// Back-compat for info/1.2 API, upgrade the theme objects in query_themes to objects.
-			if ( 'query_themes' === $action ) {
-				foreach ( $res->themes as $i => $theme ) {
-					$res->themes[ $i ] = (object) $theme;
-				}
+		// Back-compat for info/1.2 API, upgrade the theme objects in query_themes to objects.
+		if ( 'query_themes' === $action ) {
+			foreach ( $res->themes as $i => $theme ) {
+				$res->themes[ $i ] = (object) $theme;
 			}
-
-			// Back-compat for info/1.2 API, downgrade the feature_list result back to an array.
-			if ( 'feature_list' === $action ) {
-				$res = (array) $res;
-			}
+		}
+		// Back-compat for info/1.2 API, downgrade the feature_list result back to an array.
+		if ( 'feature_list' === $action ) {
+			$res = (array) $res;
 		}
 	}
 
@@ -622,10 +619,10 @@ function themes_api( $action, $args = array() ) {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param array|stdClass|WP_Error $res    WordPress.org Themes API response.
-	 * @param string                  $action Requested action. Likely values are 'theme_information',
-	 *                                        'feature_list', or 'query_themes'.
-	 * @param stdClass                $args   Arguments used to query for installer pages from the WordPress.org Themes API.
+	 * @param array|object|WP_Error $res    WordPress.org Themes API response.
+	 * @param string                $action Requested action. Likely values are 'theme_information',
+	 *                                      'feature_list', or 'query_themes'.
+	 * @param object                $args   Arguments used to query for installer pages from the WordPress.org Themes API.
 	 */
 	return apply_filters( 'themes_api_result', $res, $action, $args );
 }
